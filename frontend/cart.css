@@ -1,0 +1,174 @@
+body {
+    background: #f5f5f5;
+}
+
+/* 🛒 Cart Item */
+.cart-item {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Left side */
+.cart-left {
+    display: flex;
+    align-items: center;
+}
+
+.cart-left img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 15px;
+}
+
+/* Product name */
+.cart-left h5 {
+    margin: 0;
+}
+
+/* Quantity buttons */
+.qty-btn {
+    padding: 5px 10px;
+    border: none;
+    background: #ddd;
+    border-radius: 5px;
+}
+
+.qty-btn:hover {
+    background: #bbb;
+}
+
+/* Remove button */
+.remove-btn {
+    background: red;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+}
+
+/* Summary box */
+.cart-summary {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.prev { left: 20px; }
+.next { right: 20px; }
+
+.checkout-form {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#order-items p {
+    margin: 5px 0;
+}
+
+/* 💳 Payment Box */
+.payment-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Cards */
+.payment-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.payment-card {
+    flex: 1;
+    border: 2px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.payment-card:hover {
+    border-color: #007bff;
+}
+
+/* Selected */
+.payment-card.active {
+    border-color: #28a745;
+    background: #eafaf1;
+}
+
+/* 🌟 Page Fade In */
+body {
+    animation: fadeIn 0.8s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* 💳 Payment Card Hover */
+.payment-card {
+    transition: all 0.3s ease;
+}
+
+.payment-card:hover {
+    transform: translateY(-5px) scale(1.02);
+}
+
+/* ✅ Selected Animation */
+.payment-card.active {
+    border-color: #28a745;
+    background: #eafaf1;
+    transform: scale(1.05);
+}
+
+/* 🎯 Button Click Effect */
+.btn {
+    transition: all 0.2s ease;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+/* 💳 Card Form Animation */
+#card-form {
+    transition: all 0.4s ease;
+}
+
+/* Slide effect */
+.show-form {
+    animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 0.6s;
+}
+
+.fade-up.show {
+    opacity: 1;
+    transform: translateY(0);
+}

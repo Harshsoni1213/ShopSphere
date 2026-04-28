@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - ShopSphere</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; }
+        .stat-card { border-radius: 12px; padding: 25px; color: white; text-align: center; }
+        .order-card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+        .order-card .order-header { display: flex; justify-content: space-between; align-items: center; }
+        .order-items-list { margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee; }
+        .order-items-list p { margin: 3px 0; font-size: 14px; color: #555; }
+        .avatar { width: 60px; height: 60px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 10px; }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html">ShopSphere</a>
+        <div>
+            <a href="index.html" class="btn btn-outline-light btn-sm me-2">🏠 Home</a>
+            <a href="wishlist.html" class="btn btn-outline-light btn-sm me-2">❤️ Wishlist</a>
+            <a href="cart.html" class="btn btn-outline-light btn-sm me-2">🛒 Cart</a>
+            <button class="btn btn-danger btn-sm" onclick="logout()">Logout</button>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+
+    <!-- Profile Section -->
+    <div class="bg-white rounded p-4 mb-4 shadow-sm text-center">
+        <div class="avatar">👤</div>
+        <h4 id="user-name">Loading...</h4>
+        <p class="text-muted mb-0" id="user-email"></p>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="stat-card bg-primary">
+                <h5>Total Orders</h5>
+                <h2 id="total-orders">0</h2>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="stat-card bg-success">
+                <h5>Total Spent</h5>
+                <h2>&#8377;<span id="total-spent">0</span></h2>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="stat-card bg-danger">
+                <h5>Wishlist Items</h5>
+                <h2 id="wishlist-count">0</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order History -->
+    <div class="bg-white rounded p-4 shadow-sm">
+        <h5 class="mb-3">Order History</h5>
+        <div id="order-history">
+            <p class="text-muted">Loading...</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const API = "http://127.0.0.1:8000/api";
+const userEmail = localStorage.getItem("user");
+
+if (!userEmail) {
+    alert("Please login first!");
+    window.location.href = "login.html";
+}
+
+document.getElementById("user-email").innerText = userEmail;
+
+async function loadDashboard() {
+    const res = await fetch(`${API}/dashboard/${userEmail}/`);
+    const data = await res.json();
+
+    document.getElementById("user-name").innerText = data.name;
+    document.getElementById("total-orders").innerText = data.total_orders;
+    document.getElementById("total-spent").innerText = data.total_spent;
+    document.getElementById("wishlist-count").innerText = data.wishlist_count;
+
+    const historyDiv = document.getElementById("order-history");
+
+    if (data.recent_orders.length === 0) {
+        historyDiv.innerHTML = `
+            <div class="text-center py-4">
+                <h5 class="text-muted">No orders yet</h5>
+                <a href="index.html" class="btn btn-primary mt-2">Start Shopping</a>
+            </div>`;
+        return;
+    }
+
+    // Load full orders with items
+    const ordersRes = await fetch(`${API}/orders/${userEmail}/`);
+    const orders = await ordersRes.json();
+
+    historyDiv.innerHTML = "";
+    orders.forEach(order => {
+        const itemsHTML = order.items.map(item =>
+            `<p>${item.product_name} x ${item.quantity} = &#8377;${item.price * item.quantity}</p>`
+        ).join("");
+
+        historyDiv.innerHTML += `
+            <div class="order-card">
+                <div class="order-header">
+                    <div>
+                        <strong>Order #${order.id}</strong>
+                        <span class="text-muted ms-2" style="font-size:13px">${order.created_at}</span>
+                    </div>
+                    <div>
+                        <span class="badge bg-secondary me-2">${order.payment}</span>
+                        <strong class="text-success">&#8377;${order.total}</strong>
+                    </div>
+                </div>
+                <div class="order-items-list">
+                    <small class="text-muted">Delivered to: ${order.address}</small>
+                    ${itemsHTML}
+                </div>
+            </div>
+        `;
+    });
+}
+
+function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "login.html";
+}
+
+loadDashboard();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
