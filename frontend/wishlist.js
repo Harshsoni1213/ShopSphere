@@ -1,4 +1,4 @@
-const API = "http://127.0.0.1:8000/api";
+const API = "http://127.0.0.1:8080/api";
 const userEmail = localStorage.getItem("user");
 
 const container = document.getElementById("wishlist-items");

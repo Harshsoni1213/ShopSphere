@@ -3,7 +3,7 @@ async function login() {
     const email = document.getElementById("login-email").value;
     const password = document.getElementById("login-password").value;
 
-    const res = await fetch("http://127.0.0.1:8000/api/login/", {
+    const res = await fetch("http://127.0.0.1:8080/api/login/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
@@ -31,7 +31,7 @@ async function signup() {
         return;
     }
 
-    const res = await fetch("http://127.0.0.1:8000/api/signup/", {
+    const res = await fetch("http://127.0.0.1:8080/api/signup/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password })
